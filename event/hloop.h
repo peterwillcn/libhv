@@ -156,6 +156,9 @@ HV_EXPORT long hloop_tid(hloop_t* loop);
 HV_EXPORT void  hloop_set_userdata(hloop_t* loop, void* userdata);
 HV_EXPORT void* hloop_userdata(hloop_t* loop);
 
+// @tang.yu
+HV_EXPORT uint64_t hloop_get_loop_cnt(hloop_t* loop);
+
 // custom_event
 /*
  * hevent_t ev;

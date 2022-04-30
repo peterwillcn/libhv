@@ -531,6 +531,11 @@ void* hloop_userdata(hloop_t* loop) {
     return loop->userdata;
 }
 
+// @tang.yu
+uint64_t hloop_get_loop_cnt(hloop_t* loop) {
+	return loop->loop_cnt;
+}
+
 hidle_t* hidle_add(hloop_t* loop, hidle_cb cb, uint32_t repeat) {
     hidle_t* idle;
     HV_ALLOC_SIZEOF(idle);
@@ -900,6 +905,17 @@ hio_t* hio_create_socket(hloop_t* loop, const char* host, int port, hio_type_e t
             return NULL;
         }
 #endif
+
+	// @tang.yu
+	// NOTE: SO_REUSEPORT allow multiple sockets to bind same port
+        int reuseport = 1;
+        if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, (const char*)&reuseport, sizeof(int)) < 0) {
+            perror("setsockopt");
+            closesocket(sockfd);
+            return NULL;
+        }
+	// @tang.yu
+
         if (bind(sockfd, &addr.sa, sockaddr_len(&addr)) < 0) {
             perror("bind");
             closesocket(sockfd);

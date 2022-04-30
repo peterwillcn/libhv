@@ -2,11 +2,14 @@
 #include "htime.h"
 
 HTHREAD_ROUTINE(test_thread1) {
+	printf("tid=%ld time=%llums\n", hv_gettid(), gettimeofday_ms());
+	/*
     int cnt = 10;
     while (cnt-- > 0) {
         printf("tid=%ld time=%llums\n", hv_gettid(), gettimeofday_ms());
         hv_msleep(100);
     }
+    */
     return 0;
 }
 
@@ -41,7 +44,9 @@ protected:
 int main() {
     printf("c-style hthread_create\n");
     hthread_t thread1 = hthread_create(test_thread1, NULL);
+    printf("start thread1=%ld\n", thread1);
     hthread_join(thread1);
+    printf("end thread1=%ld\n", thread1);
 
     printf("cpp-style override HThread::run\n");
     TestThread2 thread2;
